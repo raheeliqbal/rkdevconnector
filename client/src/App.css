@@ -37,3 +37,14 @@ img {
 .form-control::placeholder {
   color: #bbb !important;
 }
+
+.btn-info {
+  border-color: #000;
+  background-color: #000;
+}
+
+.btn-info:hover {
+  color: #000;
+  border-color: #e2e6ea;
+  background-color: #e2e6ea;
+}
