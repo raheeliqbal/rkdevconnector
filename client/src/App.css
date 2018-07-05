@@ -48,3 +48,7 @@ img {
   border-color: #e2e6ea;
   background-color: #e2e6ea;
 }
+
+hr {
+  border-top: 1px solid #fff;
+}
