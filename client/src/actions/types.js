@@ -1,1 +1,1 @@
-export const types = "TEST_DISPATCH";
+export const types = "GET_ERRORS";
