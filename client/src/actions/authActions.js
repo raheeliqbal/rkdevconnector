@@ -1,15 +1,68 @@
 import axios from "axios";
-import { types } from "./types";
+import setAuthToken from "../utils/setAuthToken";
+import jwt_decode from "jwt-decode";
+
+import { GET_ERRORS, SET_CURRENT_USER } from "./types";
+import swal from "sweetalert";
 
 // Register User
 export const registerUser = (userData, history) => dispatch => {
   axios
     .post("/api/users/register", userData)
-    .then(res => history.push("/login"))
+    .then(res =>
+      swal({
+        title: "Your Account Successfully Created!",
+        text: "You clicked the button! Go The Login Page",
+        icon: "success",
+        button: "Login Page "
+      }).then(willDelete => {
+        if (willDelete) {
+          history.push("/login");
+        } else {
+          history.push("/login");
+        }
+      })
+    )
     .catch(err =>
       dispatch({
-        type: types,
+        type: GET_ERRORS,
         payload: err.response.data
       })
     );
+};
+
+// Login User
+export const loginUser = userData => dispatch => {
+  axios
+    .post("/api/users/login", userData)
+    .then(res => {
+      // Save To LocalStorage
+      const { token } = res.data;
+
+      // Set Token To LocalStorage
+      localStorage.setItem("jwtToken", token);
+
+      // Set Token To Auth Header
+      setAuthToken(token);
+
+      // Decode Token To Get User Data
+      const decoded = jwt_decode(token);
+
+      // Set Current User
+      dispatch(setCurrentUser(decoded));
+    })
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
+
+// Set Logged In User
+export const setCurrentUser = decoded => {
+  return {
+    type: SET_CURRENT_USER,
+    payload: decoded
+  };
 };
